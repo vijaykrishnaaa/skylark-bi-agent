@@ -9,15 +9,13 @@ logger = logging.getLogger(__name__)
 genai.configure(api_key=GEMINI_API_KEY)
 
 try:
-    model = genai.GenerativeModel('gemini-3.6-flash')
-    logger.info("Using gemini-3.6-flash model")
+    # Using 1.5-flash because it has a 1,000,000 TPM free tier limit
+    # whereas 3.6-flash has a strict 250,000 TPM limit which we hit with large datasets
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    logger.info("Using gemini-1.5-flash model")
 except Exception:
-    try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        logger.info("Using gemini-2.5-flash model")
-    except Exception:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        logger.info("Using gemini-1.5-flash model")
+    model = genai.GenerativeModel('gemini-2.5-flash')
+    logger.info("Using gemini-2.5-flash model")
 
 SYSTEM_PROMPT = """You are an expert Business Intelligence assistant for Skylark Drones — a drone technology company.
 
